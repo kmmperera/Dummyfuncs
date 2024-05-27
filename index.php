@@ -12,7 +12,10 @@
                             <img style="width:100px;height:100px;"  class="index-featured-img" src="<?php echo $featured_image[0]; ?>" alt="" />
    <?php endif; ?>
 
-	<?php the_content();?>
+    <?php 
+    the_content();
+    the_ID();
+    ?>
    <?php  
               $args = array(
                 'post_type' => 'attachment',

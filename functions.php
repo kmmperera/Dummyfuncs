@@ -42,7 +42,7 @@ function ceyms_process_post_type() {
 
 
 }
-add_action('init', 'ceyms_process_post_type');
+add_action('init', 'ceyms_process_post_type',0);
 
 
 
@@ -93,12 +93,12 @@ function ceymsjobsaddfunc(){
 
 
 
-
+function imguplodfunc(){ 
 if (
 	isset( $_POST['my_image_upload_nonce'], $_POST['post_id'] )
 	&& wp_verify_nonce( $_POST['my_image_upload_nonce'], 'my_image_upload' )
     && current_user_can( 'edit_post', $_POST['post_id'] )
-    &&  is_single()
+    //&&  is_single()
 ) {
 	// all ok! Moving on.
 	// These files must be connected in the front end (front-end).
@@ -117,11 +117,10 @@ if (
 	}
 
 } 
-else {
-	 echo 'Check failed. Unable to download file.';
+
 }
 
-
+add_action('init', 'imguplodfunc',10);
 
 
 
