@@ -52,6 +52,7 @@ jQuery(document).ready(function($){
               type: 'post',
               success: function(res){
                   console.log(res);
+                  $('.blog-description').html(res);
                  // window.location.reload();
               },
               error: function(err){

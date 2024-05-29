@@ -7,7 +7,7 @@ function ceyms_enqueue_scripts() {
 	wp_enqueue_style( 'dummycss', get_stylesheet_directory_uri() . '/css/styles.css', '', '1.0.99', 'all' );
 	//wp_enqueue_script( 'dummyjs', get_stylesheet_directory_uri() . '/js/main.js', array( 'jquery' ), '1.0.8', true );
 	
-	wp_register_script('mainjs',get_template_directory_uri().'/js/main.js',array('jquery'),'1.0.15',true);
+	wp_register_script('mainjs',get_template_directory_uri().'/js/main.js',array('jquery'),'1.0.16',true);
 	wp_enqueue_script('mainjs');
 
 
@@ -63,6 +63,19 @@ function shortcodeforjobform(){
 add_shortcode("scforjobform","shortcodeforjobform");
 
 
+function shortcodeforcheckout(){   
+	//$checkoutlink=wc_get_checkout_url().'?add-to-cart=221';
+	$checkoutlink='?add-to-cart=221&quantity=1';
+
+	?>
+	<a class="directcheckoutlink" href="<?php echo $checkoutlink ?>" >Pay now</a>
+
+	<?php
+}
+
+
+add_shortcode("scforcheckout","shortcodeforcheckout");
+
 add_action( 'wp_ajax_ceylonms_jobs_add', 'ceymsjobsaddfunc' );
 add_action( 'wp_ajax_nopriv_ceylonms_jobs_add', 'ceymsjobsaddfunc' );
 
@@ -85,7 +98,7 @@ function ceymsjobsaddfunc(){
 			$post_id = wp_insert_post($post);
 
 		//	wp_send_json($product_id);
-			
+			echo $post_id;
 			wp_die();
 
 
@@ -124,8 +137,16 @@ add_action('init', 'imguplodfunc',10);
 
 
 
+add_filter ('woocommerce_add_to_cart_redirect', function( $url, $adding_to_cart ) {
+    return wc_get_checkout_url();
+}, 10, 2 ); 
 
-
+add_filter( 'woocommerce_add_to_cart_validation', 'remove_cart_item_before_add_to_cart', 20, 3 );
+function remove_cart_item_before_add_to_cart( $passed, $product_id, $quantity ) {
+    if( ! WC()->cart->is_empty() )
+        WC()->cart->empty_cart();
+    return $passed;
+}
 
 
 
